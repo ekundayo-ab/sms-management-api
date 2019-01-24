@@ -7,11 +7,9 @@ import lout from 'lout';
 import inert from 'inert';
 import vision from 'vision';
 import path from 'path';
-
 import routes from './routes';
 import { validationErrorParser } from './util/parser';
 import db from './models';
-
 
 dotenv.config();
 

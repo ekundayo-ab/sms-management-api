@@ -8,12 +8,12 @@ export default (sequelize, DataTypes) => {
 
   SMS.associate = (models) => {
     SMS.belongsTo(models.Contact, {
-      as: 'senderId',
+      as: 'sender',
       foreignKey: 'senderId'
     });
 
     SMS.belongsTo(models.Contact, {
-      as: 'receiverId',
+      as: 'receiver',
       foreignKey: 'receiverId'
     });
   };
