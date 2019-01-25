@@ -64,7 +64,8 @@ const init = async () => {
     method: ['GET', 'POST'],
     path: '/{any*}',
     handler(req, h) {
-      return h.redirect('/docs');
+      return h.response({ message: 'No such route! See docs here http://localhost:8000/docs' })
+        .code(404);
     },
     options: { plugins: { lout: false } }
   });
