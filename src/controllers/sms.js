@@ -1,9 +1,9 @@
 import Boom from 'boom';
 import models from '../models';
 
-const { SMs, Contact } = models;
+const { SentSms, ReceivedSms, Contact } = models;
 
-const addSms = async (req, h) => {
+const sendSms = async (req, h) => {
   const { firstContact, secondContact } = req.pre.contact;
   if (!firstContact || !secondContact) {
     return Boom.notFound('Both sender and receiver phone must have been registered');
@@ -15,20 +15,24 @@ const addSms = async (req, h) => {
   }
 
   try {
-    const sms = await SMs.create({
+    const sentSms = await SentSms.create({
       message,
-      senderId: firstContact.id,
-      receiverId: secondContact.id
+      contactId: firstContact.id,
     });
 
-    return h.response(sms).code(201);
+    const receivedSms = await ReceivedSms.create({
+      message,
+      contactId: secondContact.id
+    });
+
+    return h.response({ sentSms, receivedSms }).code(201);
   } catch (error) {
     if (error.name === 'ValidationError') throw Boom.badRequest(error);
     throw Boom.internal(error);
   }
 };
 
-const getSms = async (req) => {
+const readSms = async (req) => {
   const { params, query } = req;
 
   try {
@@ -37,20 +41,21 @@ const getSms = async (req) => {
       return Boom.notFound('Contact has not been registered');
     }
 
-    const where = { id: params.smsId, receiverId: query.receiverId };
-    let sms = await SMs.findOne({ where });
+    // const where = { id: params.smsId, receiverId: query.receiverId };
+    // let sms = await SMs.findOne({ where });
 
-    if (!sms) {
-      return Boom.notFound('No such message exists for this contact');
-    }
+    // if (!sms) {
+    //   return Boom.notFound('No such message exists for this contact');
+    // }
 
-    sms = await SMs.update({ status: true }, {
-      where,
-      returning: true,
-      plain: true
-    });
+    // sms = await SMs.update({ status: true }, {
+    //   where,
+    //   returning: true,
+    //   plain: true
+    // });
 
-    return sms[1];
+    // return sms[1];
+    return [];
   } catch (error) {
     throw Boom.internal(error);
   }
@@ -72,7 +77,7 @@ const getAllSms = async () => {
 };
 
 export {
-  addSms,
-  getSms,
+  sendSms,
+  readSms,
   getAllSms
 };

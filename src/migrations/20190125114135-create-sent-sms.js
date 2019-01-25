@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('SentSMs', {
+    return queryInterface.createTable('SentSms', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,16 +15,25 @@ module.exports = {
         values: ['sent', 'delivered'],
         defaultValue: 'sent'
       },
-      contactId: {
+      senderId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
           model: 'Contacts',
           key: 'id',
-          as: 'contactId',
+          as: 'sender',
         },
         allowNull: false
       },
+      // receivedSmsId: {
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'ReceivedSms',
+      //     key: 'id',
+      //     as: 'receivedSms',
+      //   },
+      //   allowNull: false
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -36,6 +45,6 @@ module.exports = {
     });
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('SentSMs');
+    return queryInterface.dropTable('SentSms');
   }
 };

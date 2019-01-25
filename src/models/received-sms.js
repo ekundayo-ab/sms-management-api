@@ -1,20 +1,19 @@
 export default (sequelize, DataTypes) => {
-  const ReceivedSMS = sequelize.define('ReceivedSMS', {
+  const ReceivedSms = sequelize.define('ReceivedSms', {
     message: DataTypes.STRING,
     status: {
       type: DataTypes.ENUM,
       values: ['received', 'read'],
       defaultValue: 'received'
-    },
-    contactId: DataTypes.INTEGER
+    }
   }, {});
 
-  ReceivedSMS.associate = (models) => {
-    ReceivedSMS.belongsTo(models.Contact, {
+  ReceivedSms.associate = (models) => {
+    ReceivedSms.belongsTo(models.Contact, {
       onDelete: 'CASCADE',
-      as: 'sender',
-      foreignKey: 'senderId'
+      as: 'receiver',
+      foreignKey: 'receiverId'
     });
   };
-  return ReceivedSMS;
+  return ReceivedSms;
 };

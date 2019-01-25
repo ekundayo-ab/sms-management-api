@@ -1,5 +1,5 @@
 import { getContacts, addContact, checkContactExistence, deleteContact } from '../controllers/contact';
-import { addSms, getSms, getAllSms } from '../controllers/sms';
+import { sendSms, readSms, getAllSms } from '../controllers/sms';
 import { validateContact, validateSMS } from '../util/validation';
 
 const routes = [
@@ -33,7 +33,7 @@ const routes = [
     path: '/sms/send',
     method: 'POST',
     options: {
-      handler: addSms,
+      handler: sendSms,
       pre: [{ method: checkContactExistence, assign: 'contact' }],
       validate: {
         payload: validateSMS
@@ -44,7 +44,7 @@ const routes = [
     path: '/sms/{smsId}/read',
     method: 'GET',
     options: {
-      handler: getSms,
+      handler: readSms,
     },
   },
   {
