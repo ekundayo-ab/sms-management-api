@@ -10,7 +10,8 @@ const validateContact = Joi.object({
 
 const validateSMS = Joi.object({
   message: Joi.string().min(2).max(300).required(),
-  phone: phoneValidation
+  sender: phoneValidation,
+  receiver: phoneValidation,
 });
 
 export {

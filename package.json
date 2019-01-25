@@ -6,6 +6,7 @@
   "dependencies": {
     "boom": "^7.2.0",
     "dotenv": "^6.2.0",
+    "faker": "^4.1.0",
     "good": "^8.1.1",
     "good-console": "^7.1.0",
     "hapi": "^17.5.2",
@@ -38,7 +39,9 @@
     "build": "babel src --out-dir lib",
     "start": "node lib/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
-    "test": "NODE_ENV=test lab tests -T lab-babel -v -L -C -l"
+    "test": "NODE_ENV=test lab tests -T lab-babel -v -L -C -l",
+    "db-seed": "sequelize db:seed:all",
+    "db-reset": "sequelize db:drop && sequelize db:create && sequelize db:migrate && npm run db-seed"
   },
   "author": "",
   "license": "ISC"

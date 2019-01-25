@@ -3,19 +3,36 @@ import models from '../models';
 
 const { Contact } = models;
 
-const getContacts = () => {
-  return Contact.findAll().then(contacts => contacts);
+const getContacts = async () => {
+  const contacts = await Contact.findAll();
+  return contacts;
 };
 
-const addContact = async (req) => {
-  if (req.pre.contact) {
+const addContact = async (req, h) => {
+  if (req.pre.contact.firstContact) {
     return Boom.conflict('Contact already exists');
   }
 
   const { name, phone } = req.payload;
   try {
-    const expense = await Contact.create({ name, phone });
-    return expense;
+    const contact = await Contact.create({ name, phone });
+    return h.response(contact).code(201);
+  } catch (error) {
+    if (error.name === 'ValidationError') throw Boom.badRequest(error);
+    throw Boom.internal(error);
+  }
+};
+
+const deleteContact = async (req, h) => {
+  if (!req.pre.contact.firstContact) {
+    return Boom.notFound('Contact not found');
+  }
+
+  const { id } = req.params;
+
+  try {
+    await Contact.destroy({ where: { id } });
+    return 'Contact successfully deleted';
   } catch (error) {
     if (error.name === 'ValidationError') throw Boom.badRequest(error);
     throw Boom.internal(error);
@@ -24,11 +41,24 @@ const addContact = async (req) => {
 
 const checkContactExistence = async (req) => {
   try {
-    const result = await Contact.findOne({
-      where: { phone: req.payload.phone }
-    });
+    let firstContact;
+    let secondContact;
 
-    return result;
+    if (req.params.id) {
+      firstContact = await Contact
+        .findOne({ where: { id: req.params.id } });
+      secondContact = null;
+    } else {
+      const { phone, sender, receiver } = req.payload;
+      firstContact = await Contact
+        .findOne({ where: { phone: phone || sender } });
+
+      secondContact = await Contact
+        .findOne({ where: { phone: receiver } });
+    }
+
+
+    return { firstContact, secondContact };
   } catch (error) {
     throw Boom.badRequest(error);
   }
@@ -37,5 +67,6 @@ const checkContactExistence = async (req) => {
 export {
   getContacts,
   addContact,
+  deleteContact,
   checkContactExistence
 };
