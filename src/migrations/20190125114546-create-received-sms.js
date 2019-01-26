@@ -25,15 +25,6 @@ module.exports = {
         },
         allowNull: false
       },
-      // sentSmsId: {
-      //   type: Sequelize.INTEGER,
-      //   references: {
-      //     model: 'SentSms',
-      //     key: 'id',
-      //     as: 'sentSms',
-      //   },
-      //   allowNull: false
-      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
