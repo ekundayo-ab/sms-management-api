@@ -41,21 +41,26 @@ const readSms = async (req) => {
       return Boom.notFound('Contact has not been registered');
     }
 
-    // const where = { id: params.smsId, receiverId: query.receiverId };
-    // let sms = await SMs.findOne({ where });
+    const where = { id: params.smsId, receiverId: query.receiverId };
+    const sms = await ReceivedSms.findOne({ where });
+    if (!sms) {
+      return Boom.notFound('No such message exists for this contact');
+    }
 
-    // if (!sms) {
-    //   return Boom.notFound('No such message exists for this contact');
-    // }
+    if (sms.status === 'read') {
+      return sms;
+    }
+    const receivedSms = await ReceivedSms.update({ status: 'read' }, {
+      where,
+      returning: true,
+      plain: true
+    });
 
-    // sms = await SMs.update({ status: true }, {
-    //   where,
-    //   returning: true,
-    //   plain: true
-    // });
+    await SentSms.update({ status: 'delivered' }, {
+      where: { id: receivedSms[1].sentSmsId }
+    });
 
-    // return sms[1];
-    return [];
+    return receivedSms[1];
   } catch (error) {
     throw Boom.internal(error);
   }
