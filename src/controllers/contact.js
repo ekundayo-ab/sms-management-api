@@ -1,10 +1,16 @@
 import Boom from 'boom';
 import models from '../models';
 
-const { Contact } = models;
+const { Contact, ReceivedSms, SentSms } = models;
 
 const getContacts = async () => {
-  const contacts = await Contact.findAll();
+  const contacts = await Contact.findAll({
+    include: [
+      { model: ReceivedSms, as: 'receivedSms', required: false },
+      { model: SentSms, as: 'sentSms', required: false },
+    ],
+    order: [['id', 'ASC']],
+  });
   return contacts;
 };
 
