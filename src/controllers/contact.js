@@ -3,7 +3,7 @@ import models from '../models';
 
 const { Contact, ReceivedSms, SentSms } = models;
 
-const getContacts = async () => {
+const getAllContacts = async () => {
   const contacts = await Contact.findAll({
     include: [
       { model: ReceivedSms, as: 'receivedSms', required: false },
@@ -12,6 +12,22 @@ const getContacts = async () => {
     order: [['id', 'ASC']],
   });
   return contacts;
+};
+
+const getContact = async (req) => {
+  const contact = await Contact.findOne({
+    where: { id: req.params.id },
+    include: [
+      { model: ReceivedSms, as: 'receivedSms', required: false },
+      { model: SentSms, as: 'sentSms', required: false },
+    ],
+  });
+
+  if (!contact) {
+    return Boom.notFound('Contact does not exist');
+  }
+
+  return contact;
 };
 
 const addContact = async (req, h) => {
@@ -71,8 +87,9 @@ const checkContactExistence = async (req) => {
 };
 
 export {
-  getContacts,
+  getAllContacts,
   addContact,
   deleteContact,
+  getContact,
   checkContactExistence
 };
