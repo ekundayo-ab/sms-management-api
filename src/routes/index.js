@@ -1,12 +1,15 @@
-import {
-  getAllContacts,
-  getContact,
-  addContact,
-  checkContactExistence,
-  deleteContact
-} from '../controllers/contact';
-import { sendSms, readSms, getAllSms } from '../controllers/sms';
+import { ContactController, SmsController } from '../controllers';
 import { validateContact, validateSMS } from '../util/validation';
+
+const {
+  getAllContacts,
+  addContact,
+  deleteContact,
+  getContact,
+  checkContactExistence
+} = ContactController;
+
+const { sendSms, readSms } = SmsController;
 
 const routes = [
   {
@@ -59,14 +62,7 @@ const routes = [
     options: {
       handler: readSms,
     },
-  },
-  {
-    path: '/sms',
-    method: 'GET',
-    options: {
-      handler: getAllSms
-    },
-  },
+  }
 ];
 
 export default routes;
