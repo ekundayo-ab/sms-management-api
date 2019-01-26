@@ -26,6 +26,10 @@ export default class SmsController {
         receiverId: secondContact.id,
         sentSmsId: sentSms.id
       });
+
+      sentSms.dataValues.sender = firstContact;
+      receivedSms.dataValues.receiver = secondContact;
+
       return h.response({ sentSms, receivedSms }).code(201);
     } catch (error) {
       if (error.name === 'ValidationError') throw Boom.badRequest(error);
