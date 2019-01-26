@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const phoneValidation = Joi.string().regex(/^[0][1-9]\d{9}$|^[1-9]\d{9}$/, 'phone number')
+const phoneValidation = Joi.string().regex(/^[0][0-9]\d{9}$|^[1-9]\d{9}$/, 'phone number')
   .required();
 
 const validateContact = Joi.object({

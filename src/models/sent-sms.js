@@ -14,11 +14,6 @@ export default (sequelize, DataTypes) => {
       as: 'sender',
       foreignKey: 'senderId'
     });
-
-    SentSms.hasOne(models.ReceivedSms, {
-      as: 'sentSms',
-      foreignKey: 'sentSmsId'
-    });
   };
   return SentSms;
 };

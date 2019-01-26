@@ -17,14 +17,14 @@ const sendSms = async (req, h) => {
   try {
     const sentSms = await SentSms.create({
       message,
-      contactId: firstContact.id,
+      senderId: firstContact.id,
     });
 
     const receivedSms = await ReceivedSms.create({
       message,
-      contactId: secondContact.id
+      receiverId: secondContact.id,
+      sentSmsId: sentSms.id
     });
-
     return h.response({ sentSms, receivedSms }).code(201);
   } catch (error) {
     if (error.name === 'ValidationError') throw Boom.badRequest(error);
