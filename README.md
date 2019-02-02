@@ -1,5 +1,4 @@
 # SMS Management API
-
 An API that models sending and receiving of messages between provided contacts.
 
 ### Requirements
@@ -15,9 +14,6 @@ An API that models sending and receiving of messages between provided contacts.
 ### Running the API
 - Run project `npm run start-dev`
 - To build for production do `npm run build`
-
-### Tests
-- To run tests do `npm test` or `npm run test`
 
 ### API Endpoints
 Request type  | Endpoint                                    | Action
